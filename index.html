@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LideraConecta — UE 25 de Junio</title>
+  <style>
+    :root {
+      --navy: #1F3A5F;
+      --gold: #C9A24B;
+      --gold-light: #F0D98A;
+      --bg: #F4F6FB;
+      --bg-card: #FFFFFF;
+      --text: #2C3E50;
+      --text-mid: #4A5568;
+      --text-light: #718096;
+      --pastel-blue: #EBF0F8;
+      --pastel-gold: #FDF6E9;
+      --pastel-green: #EAF6EE;
+      --success: #27AE60;
+      --warning: #E67E22;
+      --danger: #C0392B;
+      --border: #DDE3EE;
+      --nav-h: 66px;
+      --r: 14px;
+      --shadow: 0 2px 12px rgba(31,58,95,0.09);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:var(--bg);color:var(--text);
+      min-height:100vh;padding-bottom:calc(var(--nav-h)+8px);
+      font-size:16px;line-height:1.65;
+    }
+    /* ── AVISO ── */
+    #aviso-overlay{
+      position:fixed;inset:0;background:rgba(31,58,95,0.82);
+      display:flex;align-items:center;justify-content:center;
+      z-index:9999;padding:16px;
+    }
+    #aviso-box{
+      background:#fff;border-radius:var(--r);padding:28px 24px;
+      max-width:420px;width:100%;text-align:center;
+    }
+    #aviso-box h2{color:var(--navy);font-size:1.15rem;margin-bottom:12px;}
+    #aviso-box p{font-size:.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:18px;}
+    #aviso-box button{
+      background:var(--navy);color:#fff;border:none;border-radius:8px;
+      padding:12px 28px;font-size:1rem;cursor:pointer;width:100%;
+    }
+    /* ── NAV ── */
+    #bottom-nav{
+      position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);
+      background:var(--navy);display:flex;z-index:100;
+      box-shadow:0 -2px 12px rgba(31,58,95,0.18);
+    }
+    .nav-btn{
+      flex:1;display:flex;flex-direction:column;align-items:center;
+      justify-content:center;gap:3px;cursor:pointer;
+      color:rgba(255,255,255,0.6);font-size:.62rem;font-weight:600;
+      letter-spacing:.03em;text-transform:uppercase;
+      border:none;background:transparent;padding:0;
+      transition:color .2s;
+    }
+    .nav-btn .ic{font-size:1.3rem;line-height:1;}
+    .nav-btn.active{color:#fff;}
+    .nav-btn.active .ic{
+      background:var(--gold);border-radius:8px;
+      width:36px;height:30px;display:flex;align-items:center;justify-content:center;
+    }
+    /* ── SECTIONS ── */
+    .section{display:none;padding:20px 16px;max-width:560px;margin:0 auto;}
+    .section.active{display:block;}
+    /* ── SHARED COMPONENTS ── */
+    .page-header{
+      background:linear-gradient(135deg,var(--navy) 0%,#2B5491 100%);
+      color:#fff;border-radius:var(--r);padding:24px 20px;margin-bottom:20px;
+      text-align:center;
+    }
+    .page-header h1{font-size:1.4rem;font-weight:700;}
+    .page-header p{font-size:.92rem;opacity:.88;margin-top:6px;}
+    .card{
+      background:var(--bg-card);border-radius:var(--r);
+      padding:18px 16px;margin-bottom:14px;box-shadow:var(--shadow);
+      border:1px solid var(--border);
+    }
+    .card h3{color:var(--navy);font-size:1rem;margin-bottom:6px;}
+    .card p{font-size:.92rem;color:var(--text-mid);}
+    .btn{
+      display:inline-block;padding:12px 20px;border-radius:9px;
+      font-size:.95rem;font-weight:600;cursor:pointer;
+      border:none;text-align:center;transition:opacity .15s,transform .1s;
+      width:100%;
+    }
+    .btn:active{transform:scale(.98);}
+    .btn-primary{background:var(--navy);color:#fff;}
+    .btn-gold{background:var(--gold);color:#fff;}
+    .btn-outline{background:transparent;color:var(--navy);border:2px solid var(--navy);}
+    .btn-sm{padding:8px 14px;font-size:.88rem;width:auto;}
+    .label{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);margin-bottom:4px;}
+    input,textarea,select{
+      width:100%;border:1.5px solid var(--border);border-radius:8px;
+      padding:11px 13px;font-size:.95rem;color:var(--text);
+      background:#fff;font-family:inherit;
+      transition:border-color .2s;
+    }
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--navy);}
+    textarea{resize:vertical;min-height:80px;}
+    .tag{
+      display:inline-block;padding:3px 10px;border-radius:20px;
+      font-size:.78rem;font-weight:700;
+    }
+    .tag-recibida{background:#EBF0F8;color:var(--navy);}
+    .tag-revision{background:#FDF6E9;color:#7A5A10;}
+    .tag-respondida{background:var(--pastel-green);color:#1A6635;}
+    .divider{border:none;border-top:1.5px solid var(--border);margin:18px 0;}
+    /* ── HOME GRID ── */
+    #s-inicio .ejes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+    .eje-card{
+      background:var(--bg-card);border-radius:var(--r);padding:16px 14px;
+      border:1px solid var(--border);cursor:pointer;transition:transform .15s,box-shadow .15s;
+      box-shadow:var(--shadow);text-align:center;
+    }
+    .eje-card:active{transform:scale(.97);}
+    .eje-card .icon{font-size:2rem;margin-bottom:8px;}
+    .eje-card h4{color:var(--navy);font-size:.92rem;font-weight:700;}
+    .eje-card p{color:var(--text-light);font-size:.8rem;margin-top:4px;}
+    /* ── SIMULATOR ── */
+    #sim-selector .case-card{
+      background:var(--bg-card);border-radius:var(--r);padding:18px 16px;
+      margin-bottom:12px;cursor:pointer;box-shadow:var(--shadow);
+      border:2px solid var(--border);transition:border-color .2s,transform .15s;
+    }
+    #sim-selector .case-card:active{transform:scale(.98);}
+    #sim-selector .case-card.done{border-color:var(--success);}
+    #sim-selector .case-card h4{color:var(--navy);font-size:.97rem;font-weight:700;}
+    #sim-selector .case-card p{color:var(--text-mid);font-size:.88rem;margin-top:4px;}
+    #sim-selector .case-card .status{font-size:.78rem;font-weight:700;margin-top:8px;}
+    #sim-play{display:none;}
+    .sim-context{
+      background:var(--pastel-blue);border-radius:var(--r);
+      padding:16px;margin-bottom:14px;border-left:4px solid var(--navy);
+    }
+    .sim-context .quien{font-weight:700;color:var(--navy);font-size:.88rem;margin-bottom:4px;}
+    .sim-context p{font-size:.93rem;}
+    .moment-label{
+      background:var(--navy);color:#fff;border-radius:6px;
+      padding:4px 12px;font-size:.8rem;font-weight:700;
+      display:inline-block;margin-bottom:10px;
+    }
+    .choice-btn{
+      background:#fff;border:2px solid var(--border);border-radius:10px;
+      padding:13px 15px;margin-bottom:10px;cursor:pointer;
+      text-align:left;width:100%;font-size:.93rem;color:var(--text);
+      font-family:inherit;transition:border-color .2s,background .2s;
+    }
+    .choice-btn:active{transform:scale(.99);}
+    .choice-btn:hover{border-color:var(--navy);}
+    .reaction-box{
+      background:var(--pastel-gold);border-radius:var(--r);
+      padding:14px;margin-bottom:10px;border-left:4px solid var(--gold);
+    }
+    .reaction-box .name{font-weight:700;color:#7A5A10;font-size:.85rem;}
+    .feedback-box{
+      background:var(--pastel-blue);border-radius:var(--r);
+      padding:14px;margin-bottom:14px;border-left:4px solid var(--navy);
+    }
+    .feedback-box .tipo{
+      display:inline-block;padding:2px 9px;border-radius:4px;
+      font-size:.75rem;font-weight:700;margin-bottom:6px;
+    }
+    .tipo-sancionadora{background:#FDECEA;color:var(--danger);}
+    .tipo-neutra{background:#FDF6E9;color:#7A5A10;}
+    .tipo-restaurativa{background:var(--pastel-green);color:#1A6635;}
+    .score-bars{margin:10px 0;}
+    .score-row{margin-bottom:10px;}
+    .score-row .s-label{font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:4px;display:flex;justify-content:space-between;}
+    .bar-bg{background:var(--border);border-radius:4px;height:10px;}
+    .bar-fill{height:10px;border-radius:4px;background:var(--navy);transition:width .6s ease;}
+    .reflex-q{background:var(--pastel-blue);border-radius:9px;padding:12px;margin-bottom:8px;font-size:.92rem;color:var(--navy);border-left:3px solid var(--gold);}
+    /* ── BUBBLES ── */
+    .bubbles-list button{
+      display:block;width:100%;text-align:left;background:var(--bg-card);
+      border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;
+      margin-bottom:10px;cursor:pointer;font-size:.93rem;color:var(--text);
+      font-family:inherit;transition:border-color .2s;
+    }
+    .bubbles-list button:hover{border-color:var(--navy);}
+    /* ── SUGERENCIAS ── */
+    .sug-item{
+      background:var(--bg-card);border-radius:var(--r);padding:14px;
+      margin-bottom:10px;border:1px solid var(--border);box-shadow:var(--shadow);
+    }
+    .sug-item .fecha{font-size:.78rem;color:var(--text-light);margin-bottom:4px;}
+    .sug-item p{font-size:.92rem;}
+    .sug-item .sug-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+    /* ── HUELLAS ── */
+    .huella-card{
+      background:linear-gradient(135deg,var(--pastel-gold) 0%,#FFF9EE 100%);
+      border-radius:var(--r);padding:16px;margin-bottom:12px;
+      border:1px solid #E8D5A3;box-shadow:var(--shadow);
+    }
+    .huella-card .huella-nombre{font-weight:700;color:var(--navy);font-size:.97rem;}
+    .huella-card .huella-msg{font-size:.92rem;margin:6px 0;color:var(--text-mid);}
+    .huella-card .huella-comision{
+      background:var(--navy);color:#fff;border-radius:6px;
+      padding:4px 10px;font-size:.8rem;font-weight:600;display:inline-block;
+    }
+    .huella-card .huella-fecha{font-size:.76rem;color:var(--text-light);margin-top:6px;}
+    /* ── BIENESTAR ── */
+    .breath-wrap{text-align:center;padding:20px 0;}
+    .breath-circle{
+      width:140px;height:140px;border-radius:50%;
+      background:radial-gradient(circle,var(--pastel-blue),var(--navy));
+      margin:0 auto;display:flex;align-items:center;justify-content:center;
+      font-size:.95rem;font-weight:700;color:#fff;
+      box-shadow:0 0 0 0 rgba(31,58,95,0.3);
+    }
+    .breath-circle.inhala{animation:inhale 4s ease-in-out forwards;}
+    .breath-circle.retiene{animation:retain 4s ease-in-out forwards;}
+    .breath-circle.exhala{animation:exhale 6s ease-in-out forwards;}
+    @keyframes inhale{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(31,58,95,.3);}100%{transform:scale(1.45);box-shadow:0 0 0 30px rgba(31,58,95,.0);}}
+    @keyframes retain{0%{transform:scale(1.45);}100%{transform:scale(1.45);}}
+    @keyframes exhale{0%{transform:scale(1.45);}100%{transform:scale(1);}}
+    .breath-timer{font-size:2.5rem;font-weight:700;color:var(--navy);margin:16px 0 4px;}
+    .breath-phase{font-size:1.1rem;color:var(--gold);font-weight:700;margin-bottom:8px;}
+    .emociones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;}
+    .emo-btn{
+      background:#fff;border:2px solid var(--border);border-radius:10px;
+      padding:10px 4px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;
+      font-family:inherit;
+    }
+    .emo-btn .emo-ic{font-size:1.6rem;display:block;margin-bottom:3px;}
+    .emo-btn .emo-label{font-size:.75rem;color:var(--text-mid);}
+    .emo-btn.selected{border-color:var(--navy);background:var(--pastel-blue);}
+    .deconex-bloque{background:var(--pastel-blue);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+    .deconex-bloque h4{color:var(--navy);font-size:.95rem;font-weight:700;margin-bottom:8px;}
+    /* ── PRUEBA ── */
+    .pregunta-block{margin-bottom:18px;}
+    .pregunta-block .q-text{font-size:.95rem;font-weight:600;color:var(--navy);margin-bottom:8px;}
+    .escala{display:flex;gap:6px;justify-content:space-between;}
+    .escala-btn{
+      flex:1;background:#fff;border:2px solid var(--border);border-radius:8px;
+      padding:10px 2px;text-align:center;cursor:pointer;
+      font-size:.95rem;font-weight:700;color:var(--text-mid);
+      transition:border-color .2s,background .2s;
+    }
+    .escala-btn.selected{background:var(--navy);color:#fff;border-color:var(--navy);}
+    .result-prueba{background:var(--pastel-blue);border-radius:var(--r);padding:16px;margin-top:16px;}
+    .result-prueba h4{color:var(--navy);margin-bottom:8px;}
+    /* ── FOOTER ── */
+    .footer-aviso{
+      font-size:.75rem;color:var(--text-light);text-align:center;
+      padding:12px 16px;line-height:1.5;margin-top:8px;
+    }
+    /* ── ALERTS ── */
+    .alert{border-radius:8px;padding:12px 14px;font-size:.9rem;margin-bottom:12px;}
+    .alert-ok{background:var(--pastel-green);color:#1A6635;}
+    .alert-err{background:#FDECEA;color:var(--danger);}
+    /* ── HORARIO TABLE ── */
+    .horario-table{width:100%;border-collapse:collapse;font-size:.88rem;}
+    .horario-table th,.horario-table td{
+      border:1px solid var(--border);padding:8px 10px;text-align:center;
+    }
+    .horario-table th{background:var(--navy);color:#fff;}
+    .horario-table input{
+      border:none;padding:4px;font-size:.88rem;text-align:center;
+      background:transparent;width:100%;
+    }
+    .horario-table input:focus{outline:1px solid var(--navy);}
+  </style>
+</head>
+<body>
+
+<!-- AVISO DE PRIVACIDAD -->
+<div id="aviso-overlay">
+  <div id="aviso-box">
+    <h2>⚠️ Aviso importante</h2>
+    <p><strong>Prototipo educativo.</strong> No ingreses datos personales de docentes ni casos disciplinarios reales. Todos los casos son ficticios. La orientación es un apoyo; la decisión final es siempre del directivo.</p>
+    <button onclick="cerrarAviso()">Entendido, continuar</button>
+  </div>
+</div>
+
+<!-- SECCIONES -->
+<div id="s-inicio" class="section active">
+  <div class="page-header">
+    <h1>🎓 LideraConecta</h1>
+    <p>Escuchar para construir</p>
+    <p style="font-size:.8rem;opacity:.7;margin-top:4px;">Unidad Educativa "25 de Junio" · Machala, Ecuador</p>
+  </div>
+  <div class="card" style="border-left:4px solid var(--gold);">
+    <p style="font-size:.9rem;color:var(--text-mid);">Herramienta de apoyo para directivos y docentes en gestión humanizada y liderazgo transformacional. Explora los ejes de trabajo a continuación.</p>
+  </div>
+  <div class="ejes">
+    <div class="eje-card" onclick="irA('simulador')">
+      <div class="icon">🎭</div>
+      <h4>Simulador</h4>
+      <p>Mediación restaurativa</p>
+    </div>
+    <div class="eje-card" onclick="irA('circulos')">
+      <div class="icon">💬</div>
+      <h4>Círculos</h4>
+      <p>Diálogo y buzón</p>
+    </div>
+    <div class="eje-card" onclick="irA('huellas')">
+      <div class="icon">⭐</div>
+      <h4>Huellas</h4>
+      <p>Reconocimiento docente</p>
+    </div>
+    <div class="eje-card" onclick="irA('bienestar')">
+      <div class="icon">🌱</div>
+      <h4>Bienestar</h4>
+      <p>Pausa y desconexión</p>
+    </div>
+  </div>
+  <div class="footer-aviso">Prototipo educativo. No ingreses datos personales de docentes ni casos disciplinarios reales. Todos los casos son ficticios. La orientación es un apoyo; la decisión final es siempre del directivo.</div>
+</div>
+
+<!-- SIMULADOR -->
+<div id="s-simulador" class="section">
+  <div class="page-header">
+    <h1>🎭 Simulador de Mediación</h1>
+    <p>Practica respuestas restaurativas ante situaciones reales</p>
+  </div>
+
+  <!-- Selector de caso -->
+  <div id="sim-selector">
+    <p style="font-size:.9rem;color:var(--text-mid);margin-bottom:14px;">Selecciona un caso para explorar. Cada uno tiene varios momentos de decisión.</p>
+    <div id="case-cards"></div>
+  </div>
+
+  <!-- Simulación activa -->
+  <div id="sim-play">
+    <div id="sim-case-header" class="card" style="margin-bottom:12px;border-left:4px solid var(--gold);"></div>
+    <div id="sim-moment-area"></div>
+    <button class="btn btn-outline" onclick="volverSimSelector()" style="margin-top:6px;">← Volver a casos</button>
+  </div>
+
+  <!-- Resultado final -->
+  <div id="sim-result" style="display:none;">
+    <div class="page-header" style="background:linear-gradient(135deg,#1A6635,#27AE60);">
+      <h1>✅ Caso completado</h1>
+      <p id="res-case-title"></p>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px;">Tu perfil de liderazgo</h3>
+      <div class="score-bars" id="score-bars"></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:10px;">🔍 Preguntas de reflexión</h3>
+      <div id="reflex-qs"></div>
+    </div>
+    <button class="btn btn-primary" onclick="volverSimSelector()">Explorar otro caso</button>
+  </div>
+</div>
+
+<!-- CÍRCULOS -->
+<div id="s-circulos" class="section">
+  <div class="page-header">
+    <h1>💬 Círculos de Diálogo</h1>
+    <p>Escucha activa y espacio seguro para la comunidad</p>
+  </div>
+
+  <!-- Guía de preguntas -->
+  <div class="card">
+    <h3>🟡 Guía para abrir un círculo</h3>
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:12px;">Usa estas preguntas para facilitar un círculo de diálogo con tu equipo docente.</p>
+    <div class="bubbles-list" id="preguntas-lista"></div>
+    <p style="font-size:.8rem;color:var(--text-light);margin-top:8px;">💡 Recuerda: el directivo guía, pero todos tienen voz y tiempo equitativos.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Buzón de sugerencias -->
+  <div class="card">
+    <h3>📬 Buzón Transparente</h3>
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:14px;">Las sugerencias son anónimas y visibles para todo el equipo. Se gestionan con transparencia.</p>
+    <div class="label">Tu sugerencia anónima</div>
+    <textarea id="sugerencia-txt" placeholder="Escribe aquí tu sugerencia, propuesta o inquietud..." style="margin-bottom:10px;"></textarea>
+    <button class="btn btn-primary" onclick="enviarSugerencia()">📨 Enviar sugerencia</button>
+    <div id="sug-alert"></div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Sugerencias recibidas</h3>
+    <div id="sugerencias-lista">
+      <p style="color:var(--text-light);font-size:.9rem;">No hay sugerencias aún.</p>
+    </div>
+  </div>
+</div>
+
+<!-- HUELLAS -->
+<div id="s-huellas" class="section">
+  <div class="page-header">
+    <h1>⭐ Huellas Educativas</h1>
+    <p>Muro de reconocimiento docente</p>
+  </div>
+
+  <div class="card">
+    <h3>🌟 Reconocer una iniciativa</h3>
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:14px;">Destaca el trabajo valioso de alguien. Usa un nombre real o ficticio.</p>
+    <div class="label">Nombre o seudónimo</div>
+    <input type="text" id="h-nombre" placeholder="Ej: Maestra Valeria, El equipo de 5.°…" style="margin-bottom:10px;">
+    <div class="label">¿Qué hizo que merece reconocerse?</div>
+    <textarea id="h-mensaje" placeholder="Describe brevemente la iniciativa o gesto destacado..." style="margin-bottom:10px;"></textarea>
+    <div class="label">Fortaleza principal que refleja</div>
+    <select id="h-fortaleza" style="margin-bottom:12px;">
+      <option value="">— Selecciona —</option>
+      <option value="innovación">Innovación pedagógica</option>
+      <option value="empatía">Empatía y escucha</option>
+      <option value="colaboración">Colaboración y trabajo en equipo</option>
+      <option value="comunicación">Comunicación asertiva</option>
+      <option value="liderazgo">Liderazgo con el ejemplo</option>
+      <option value="resiliencia">Resiliencia y adaptación</option>
+    </select>
+    <button class="btn btn-gold" onclick="publicarHuella()">⭐ Publicar en el muro</button>
+    <div id="h-alert"></div>
+  </div>
+
+  <div id="huellas-muro">
+    <p style="color:var(--text-light);font-size:.9rem;padding:8px 0;">El muro de reconocimiento está vacío. ¡Sé el primero en publicar!</p>
+  </div>
+</div>
+
+<!-- BIENESTAR -->
+<div id="s-bienestar" class="section">
+  <div class="page-header">
+    <h1>🌱 Bienestar y Desconexión</h1>
+    <p>Cuídate para poder cuidar a tu equipo</p>
+  </div>
+
+  <!-- Pausa socioemocional -->
+  <div class="card">
+    <h3>🌬️ Pausa de 60 segundos</h3>
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:12px;">Una respiración guiada para resetear tu estado antes de una reunión difícil.</p>
+    <div class="breath-wrap">
+      <div class="breath-circle" id="breath-circle">
+        <span id="breath-texto">Inicio</span>
+      </div>
+      <div class="breath-timer" id="breath-timer">60</div>
+      <div class="breath-phase" id="breath-phase">Presiona iniciar</div>
+    </div>
+    <button class="btn btn-primary" id="btn-pausa" onclick="iniciarPausa()">▶ Iniciar pausa</button>
+  </div>
+
+  <!-- Chequeo emocional -->
+  <div class="card">
+    <h3>💛 Chequeo emocional rápido</h3>
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:12px;">¿Cómo llego a esta reunión? Sin juicios, solo reconocimiento.</p>
+    <div class="emociones-grid" id="emociones-grid"></div>
+    <div id="emo-msg" style="font-size:.9rem;color:var(--text-mid);min-height:24px;margin-top:4px;"></div>
+  </div>
+
+  <!-- Desconexión digital -->
+  <div class="card">
+    <h3>📵 Instructivo de desconexión digital</h3>
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:14px;">Define tus horarios de respuesta y comunícalos con anticipación de 24 horas.</p>
+
+    <div class="deconex-bloque">
+      <h4>⏰ Horario de respuesta editable</h4>
+      <table class="horario-table">
+        <thead>
+          <tr><th>Día</th><th>Disponible desde</th><th>Hasta</th></tr>
+        </thead>
+        <tbody id="horario-body"></tbody>
+      </table>
+      <button class="btn btn-sm btn-outline" style="margin-top:10px;" onclick="guardarHorario()">💾 Guardar</button>
+      <div id="horario-alert"></div>
+    </div>
+
+    <div class="deconex-bloque" style="background:var(--pastel-gold);">
+      <h4>📝 Plantilla de comunicación oficial</h4>
+      <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:10px;">Envía avisos con al menos 24 horas de anticipación. Personaliza este modelo:</p>
+      <textarea id="plantilla-msg" style="font-size:.88rem;" rows="6"></textarea>
+      <button class="btn btn-sm btn-gold" style="margin-top:8px;" onclick="copiarPlantilla()">📋 Copiar plantilla</button>
+      <div id="plantilla-alert"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRUEBA TEMPRANA -->
+<div id="s-prueba" class="section">
+  <div class="page-header">
+    <h1>📊 Prueba Temprana</h1>
+    <p>Evaluación de usabilidad — 4 usuarios</p>
+  </div>
+
+  <div class="card">
+    <h3>Formulario de usabilidad</h3>
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:14px;">Tu retroalimentación ayuda a mejorar esta herramienta. Responde con honestidad.</p>
+    <div id="form-prueba">
+      <div id="preguntas-prueba"></div>
+      <div class="label" style="margin-top:4px;">Comentario libre (opcional)</div>
+      <textarea id="prueba-comentario" placeholder="¿Qué mejorarías o qué te pareció más útil?" style="margin-bottom:14px;"></textarea>
+      <button class="btn btn-primary" onclick="enviarPrueba()">✅ Enviar evaluación</button>
+      <div id="prueba-alert"></div>
+    </div>
+  </div>
+
+  <div class="card" id="prueba-resultados" style="display:none;">
+    <h3 style="margin-bottom:12px;">📈 Resumen de resultados</h3>
+    <div id="resultado-content"></div>
+    <button class="btn btn-outline" style="margin-top:12px;" onclick="exportarJSON()">⬇️ Exportar como JSON</button>
+    <div id="export-alert"></div>
+  </div>
+</div>
+
+<!-- NAV INFERIOR -->
+<nav id="bottom-nav">
+  <button class="nav-btn active" data-section="inicio" onclick="mostrarSeccion('inicio',this)">
+    <span class="ic">🏠</span><span>Inicio</span>
+  </button>
+  <button class="nav-btn" data-section="simulador" onclick="mostrarSeccion('simulador',this)">
+    <span class="ic">🎭</span><span>Simulador</span>
+  </button>
+  <button class="nav-btn" data-section="circulos" onclick="mostrarSeccion('circulos',this)">
+    <span class="ic">💬</span><span>Círculos</span>
+  </button>
+  <button class="nav-btn" data-section="huellas" onclick="mostrarSeccion('huellas',this)">
+    <span class="ic">⭐</span><span>Huellas</span>
+  </button>
+  <button class="nav-btn" data-section="bienestar" onclick="mostrarSeccion('bienestar',this)">
+    <span class="ic">🌱</span><span>Bienestar</span>
+  </button>
+  <button class="nav-btn" data-section="prueba" onclick="mostrarSeccion('prueba',this)">
+    <span class="ic">📊</span><span>Prueba</span>
+  </button>
+</nav>
+
+<script>
+// ── UTILS ──
+function lsGet(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch{return def;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+
+function mostrarSeccion(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function irA(id){
+  const btn=document.querySelector('[data-section="'+id+'"]');
+  mostrarSeccion(id,btn);
+}
+
+// ── AVISO ──
+function cerrarAviso(){
+  document.getElementById('aviso-overlay').style.display='none';
+  lsSet('aviso_visto',true);
+}
+if(lsGet('aviso_visto',false)) document.getElementById('aviso-overlay').style.display='none';
+
+// ────────────────────────────────────────────
+// ── SIMULADOR ──
+// ────────────────────────────────────────────
+const CASOS=[
+  {
+    id:'a',
+    titulo:'La entrega tardía',
+    subtitulo:'Docente que entregó un informe con demora por una emergencia familiar.',
+    personaje:'Carmen Rosales',
+    contexto:'La docente Carmen Rosales entregó el informe de rendimiento con tres días de retraso. Es la primera vez que esto ocurre en cuatro años de trabajo. Acaba de llegar a la institución cuando tú la llamas a tu oficina.',
+    momentos:[
+      {
+        situacion:'Carmen entra nerviosa. Antes de que ella diga algo, ¿cómo comienzas la conversación?',
+        opciones:[
+          {texto:'«Carmen, este retraso pone en riesgo el proceso de evaluación institucional. Necesito saber por qué no cumplió.»',tipo:'sancionadora',reaccion:'Carmen baja la mirada y dice: «Entiendo. Lo siento.» Se cierra, no comparte el contexto real.',feedback:'Empezar desde la norma genera defensividad. La docente no siente espacio seguro para explicarse, lo que impide conocer las causas reales.',score:{E:0,CA:1,ER:0}},
+          {texto:'«Hola, Carmen. Necesitamos hablar del informe. ¿Pasó algo?»',tipo:'neutra',reaccion:'Carmen dice: «Sí, hubo un problema personal.» Comparte algo, pero no lo suficiente para una conversación de fondo.',feedback:'La pregunta abre espacio, aunque la brevedad y la inmediatez del tema pueden mantener a la docente en guardia. Es un buen punto de partida.',score:{E:1,CA:1,ER:1}},
+          {texto:'«Carmen, gracias por venir. Antes de hablar del informe, quería preguntarte cómo estás. ¿Puedo ofrecerte agua?»',tipo:'restaurativa',reaccion:'Carmen respira, se sienta. «Gracias. Fue una semana muy dura. Mi mamá estuvo hospitalizada.» Se nota visible alivio.',feedback:'Comenzar con bienestar activa la confianza. La docente se siente vista como persona, no solo como funcionaria, lo que permite una conversación auténtica.',score:{E:2,CA:2,ER:2}}
+        ]
+      },
+      {
+        situacion:'Carmen te explica que su madre estuvo hospitalizada. Tú necesitas igual resolver el informe pendiente. ¿Qué haces?',
+        opciones:[
+          {texto:'«Entiendo, pero el informe era urgente. Lo necesito hoy sin falta.»',tipo:'sancionadora',reaccion:'Carmen asiente, pero se nota tensa. «Está bien, lo hago ahora mismo.» Cumple, pero con resentimiento.',feedback:'La urgencia válida puede comunicarse sin invalidar el contexto. Separar la necesidad institucional del impacto personal evitaría la tensión acumulada.',score:{E:0,CA:1,ER:0}},
+          {texto:'«Qué difícil, Carmen. Pongamos una nueva fecha para el informe, ¿te parece el lunes?»',tipo:'neutra',reaccion:'Carmen agradece. «Sí, puedo tenerlo el lunes.» La conversación se resuelve, aunque sin mayor profundidad.',feedback:'Fijar un plazo es útil y necesario. La respuesta es funcional, aunque no explora si Carmen necesita algún apoyo adicional.',score:{E:1,CA:1,ER:1}},
+          {texto:'«Gracias por contarme, Carmen. Acordemos juntos una nueva fecha que te permita retomar con calma. ¿Qué te parece el martes?»',tipo:'restaurativa',reaccion:'«El martes perfecto, gracias. Me alivia saber que puedo organizarme.» Se compromete con entusiasmo real.',feedback:'Negociar el plazo en conjunto genera compromiso genuino. La docente siente respeto por su situación y corresponde con responsabilidad.',score:{E:2,CA:2,ER:2}}
+        ]
+      },
+      {
+        situacion:'Al despedirse, Carmen menciona que esto no va a repetirse. ¿Cómo cierras la conversación?',
+        opciones:[
+          {texto:'«Bien. Queda registrado en tu carpeta. Si ocurre de nuevo, habrá una llamada de atención formal.»',tipo:'sancionadora',reaccion:'Carmen sale cabizbaja. Cumplirá el requerimiento, pero el vínculo de confianza queda debilitado.',feedback:'El registro y la advertencia son necesarios en contextos reiterados, pero aquí aún no aplica. La amenaza prematura erosiona la cultura de confianza.',score:{E:0,CA:0,ER:0}},
+          {texto:'«De acuerdo, Carmen. Hasta el martes.»',tipo:'neutra',reaccion:'Carmen sale con normalidad. Nada malo, pero tampoco un cierre que fortalezca el vínculo.',feedback:'El cierre funcional es correcto, aunque se pierde la oportunidad de consolidar la relación profesional y el compromiso mutuo.',score:{E:1,CA:1,ER:0}},
+          {texto:'«Gracias por confiarme lo que pasó, Carmen. Si en algún momento necesitas un ajuste, podemos conversarlo. Cuéntame cuando estés bien.»',tipo:'restaurativa',reaccion:'«Gracias, en serio. No esperaba esto.» Sale con la cabeza erguida y una pequeña sonrisa.',feedback:'El cierre restaurativo confirma que el espacio de diálogo permanece abierto. La docente se marcha comprometida y con dignidad intacta.',score:{E:2,CA:2,ER:2}}
+        ]
+      }
+    ],
+    reflexiones:[
+      '¿Qué información hubiera necesitado antes de iniciar la conversación?',
+      '¿Cómo afecta el tono inicial a la disposición del docente para cumplir compromisos?'
+    ]
+  },
+  {
+    id:'b',
+    titulo:'La solicitud del viernes',
+    subtitulo:'Directivo que envía una solicitud administrativa importante un viernes por la noche.',
+    personaje:'Marco Suárez',
+    contexto:'Son las 9 p. m. del viernes. El subdirector Marco Suárez te reenvía una circular del distrito con cambios en la planificación curricular. Te escribe: «Para el lunes temprano, por favor». No es una emergencia de salud, pero sí un cambio institucional relevante.',
+    momentos:[
+      {
+        situacion:'Es viernes por la noche. ¿Cómo respondes al mensaje de Marco?',
+        opciones:[
+          {texto:'Respondes al instante: «Recibido. Lo reviso ahora y te confirmo en unos minutos.»',tipo:'sancionadora',reaccion:'Marco responde: «Perfecto, gracias.» Tú pasas el fin de semana pendiente del trabajo. Se normaliza la disponibilidad continua.',feedback:'Responder de inmediato en tiempo fuera consolida la cultura de hiperconectividad. Sin quererlo, envías el mensaje de que todos deben estar disponibles siempre.',score:{E:0,CA:0,ER:0}},
+          {texto:'No respondes hasta el sábado por la mañana: «Visto. Lo atiendo el fin de semana.»',tipo:'neutra',reaccion:'Marco asume que todo está en orden. Tú destinas parte del sábado al trabajo. La situación se resuelve, pero sin un acuerdo claro.',feedback:'Atender en fin de semana sin una conversación sobre límites prolonga el problema. Es una solución inmediata sin abordaje institucional.',score:{E:1,CA:0,ER:0}},
+          {texto:'Respondes el lunes temprano: «Hola Marco, vi tu mensaje. Para comunicaciones de este tipo, propongo acordar un canal y horario oficial. ¿Hablamos hoy a las 8?»',tipo:'restaurativa',reaccion:'Marco contesta: «Claro, con gusto. La verdad, tampoco me gusta escribir a estas horas.» Abre una conversación necesaria.',feedback:'Proponer un protocolo en lugar de quejarte o ceder establece una cultura institucional de respeto. Tú modelas el cambio que quieres ver.',score:{E:2,CA:2,ER:2}}
+        ]
+      },
+      {
+        situacion:'El lunes conversas con Marco. Él admite que el correo llegó así desde el distrito. ¿Qué propones?',
+        opciones:[
+          {texto:'«Entonces el problema es el distrito, no nosotros. No podemos hacer nada.»',tipo:'sancionadora',reaccion:'Marco encoge los hombros. «Supongo que sí.» El equipo queda sin protección y el patrón continúa.',feedback:'Atribuir el problema externamente sin acción propia desprotege al equipo. Los directivos tienen margen para filtrar y acordar cómo distribuyen la información.',score:{E:0,CA:0,ER:0}},
+          {texto:'«Hagamos una regla interna: cualquier solicitud llega antes de las 5 p. m.»',tipo:'neutra',reaccion:'Marco asiente. «Tiene sentido.» Se acuerda una norma, aunque sin consenso docente ni protocolo escrito.',feedback:'Establecer la norma es positivo. Fortalecería si se documenta y se socializa con todo el equipo para que sea compartida y no solo declarada.',score:{E:1,CA:1,ER:1}},
+          {texto:'«Propongo que diseñemos juntos una política de comunicación para el equipo: horarios, canales, tiempos de respuesta. Y la presentamos en la próxima reunión.»',tipo:'restaurativa',reaccion:'«Me parece excelente. Yo me comprometo a filtrarlo antes de reenviar.» Marco asume un rol activo.',feedback:'Involucrar al equipo en la creación del protocolo aumenta el compromiso. Una política construida en conjunto tiene más posibilidades de sostenerse.',score:{E:2,CA:2,ER:2}}
+        ]
+      },
+      {
+        situacion:'Dos semanas después, el mismo patrón se repite. Un docente te escribe un sábado. ¿Cómo respondes?',
+        opciones:[
+          {texto:'Respondes de inmediato y luego llamas al docente para llamarle la atención.',tipo:'sancionadora',reaccion:'El docente se siente confundido: «Pero usted siempre contesta…» La norma aún no está clara para todos.',feedback:'La contradicción entre norma y conducta personal genera confusión. La credibilidad de la política depende de que quien la lidera también la practique.',score:{E:0,CA:0,ER:0}},
+          {texto:'Esperas al lunes y respondes sin mencionar la política.',tipo:'neutra',reaccion:'El docente no entiende el retraso. Funciona, pero se pierde la oportunidad de recordar el acuerdo.',feedback:'Cumples la política en tu conducta, pero sin comunicarlo no la refuerzas. Aún falta que sea una norma interiorizada por el equipo.',score:{E:1,CA:1,ER:0}},
+          {texto:'El lunes respondes y agregas: «Recordatorio amistoso: el acuerdo de comunicaciones oficial es de lunes a viernes hasta las 17h00. ¡Cuenten con mi respuesta oportuna dentro de ese horario!»',tipo:'restaurativa',reaccion:'El docente responde: «Ah, es verdad. Disculpe, lo olvidé. Gracias por recordármelo.»',feedback:'Reforzar la norma con calidez y sin sanción consolida la cultura. La recordación amigable es más efectiva y duradera que la llamada de atención.',score:{E:2,CA:2,ER:2}}
+        ]
+      }
+    ],
+    reflexiones:[
+      '¿Cómo afecta tu propio comportamiento digital al clima institucional del equipo?',
+      '¿Qué espacios o rituales podrían ayudar a establecer límites de disponibilidad saludables?'
+    ]
+  },
+  {
+    id:'c',
+    titulo:'El espacio disputado',
+    subtitulo:'Dos docentes en desacuerdo por el uso compartido de un aula o sala.',
+    personaje:'Ana Loja y Roberto Vega',
+    contexto:'La docente Ana Loja y el docente Roberto Vega llevan dos semanas en tensión porque ambos reservan la sala de tecnología al mismo tiempo los miércoles. Hoy llegaron los dos juntos a tu oficina, interrumpiendo tu reunión.',
+    momentos:[
+      {
+        situacion:'Ana y Roberto hablan al mismo tiempo y se contradicen. ¿Cómo tomas el control de la situación?',
+        opciones:[
+          {texto:'«Un momento. Esto es un problema de organización que debieron resolver solos. Subo la reserva a un formulario y quien llegue primero, tiene el espacio.»',tipo:'sancionadora',reaccion:'Ambos salen molestos. Roberto dice en voz baja: «Siempre es lo mismo.» La tensión no se resolvió; solo se trasladó.',feedback:'La solución administrativa elimina el síntoma pero ignora la relación deteriorada. Dos semanas de conflicto necesitan más que un formulario.',score:{E:0,CA:1,ER:0}},
+          {texto:'«Calma, uno a la vez. Ana primero, luego Roberto.» Escuchas a cada uno por separado.',tipo:'neutra',reaccion:'Escuchas las dos versiones. Ana y Roberto se sienten algo escuchados, aunque siguen en posiciones encontradas.',feedback:'Dar la palabra a cada uno es un paso básico y necesario. El siguiente nivel sería facilitar que se escuchen entre sí, no solo al directivo.',score:{E:1,CA:1,ER:1}},
+          {texto:'«Gracias por venir. Antes de que me cuenten, necesito pedirles un favor: hablen de turno y traten de escucharse. Yo solo voy a facilitar.»',tipo:'restaurativa',reaccion:'Hay un silencio breve. Roberto dice: «Está bien.» Ana asiente. Ambos empiezan a hablar de forma más ordenada.',feedback:'Establecer desde el inicio las reglas del diálogo transfiere el protagonismo a los involucrados. El directivo facilita, no resuelve. Esto genera soluciones más sostenibles.',score:{E:2,CA:2,ER:2}}
+        ]
+      },
+      {
+        situacion:'Escuchas que el problema de fondo es que los dos tienen grupos que necesitan tecnología y no hay suficiente disponibilidad. ¿Cómo avanzas?',
+        opciones:[
+          {texto:'«Les asigno días fijos a cada uno. Roberto los lunes y Ana los miércoles.»',tipo:'sancionadora',reaccion:'Ana dice: «Pero mis grupos de miércoles son los más numerosos.» Roberto: «¿Y si necesito un día extra?» La solución es rígida y no contempla la realidad.',feedback:'Decidir por ellos sin escuchar sus necesidades reales puede generar inconformidades nuevas. Una solución impuesta rara vez se sostiene.',score:{E:0,CA:1,ER:0}},
+          {texto:'«¿Qué proponen ustedes? Los escucho.»',tipo:'neutra',reaccion:'Ambos ofrecen propuestas parciales. Se acerca a una solución, pero sin una estructura que facilite el acuerdo.',feedback:'Invitar a las propuestas es correcto. El directivo puede complementar facilitando el diálogo y ayudando a evaluar juntos las opciones.',score:{E:1,CA:1,ER:1}},
+          {texto:'«Parece que el problema no es entre ustedes dos, sino de recursos insuficientes. ¿Podemos mapear juntos cuántas horas necesitan y proponer un esquema compartido?»',tipo:'restaurativa',reaccion:'Roberto: «Exacto, eso es.» Ana: «Si colaboramos en el horario, sale mejor para los dos.» El tono cambia.',feedback:'Redefinir el problema como un reto compartido desactiva la confrontación. Ambos pasan de adversarios a aliados, lo que facilita una solución real.',score:{E:2,CA:2,ER:2}}
+        ]
+      },
+      {
+        situacion:'Acuerdan un nuevo esquema de turnos. Antes de cerrar, Ana menciona: «Es que Roberto nunca avisa cuando no va a usar el espacio.» ¿Cómo abordas esto?',
+        opciones:[
+          {texto:'«Roberto, si no usas el espacio debes avisar. Eso es una obligación.»',tipo:'sancionadora',reaccion:'Roberto se pone a la defensiva: «No siempre sé con anticipación.» Ana cruza los brazos. El acuerdo queda empañado.',feedback:'Aunque la norma es válida, señalar frente a ambos puede generar vergüenza y cerrar el diálogo justo cuando estaba avanzando.',score:{E:0,CA:0,ER:0}},
+          {texto:'«Ese es un buen punto, Ana. Roberto, ¿te parece si acordamos un tiempo mínimo de aviso?»',tipo:'neutra',reaccion:'Roberto dice: «Dos horas antes estaría bien.» Acuerdo parcial, funcional.',feedback:'Incluir la propuesta de Ana e invitar a Roberto a responder es un camino positivo. Documentar el acuerdo fortalecería el compromiso.',score:{E:1,CA:1,ER:1}},
+          {texto:'«Ana, gracias por nombrarlo. ¿Creen que podemos incorporarlo como parte del protocolo de uso del espacio que acabamos de acordar?»',tipo:'restaurativa',reaccion:'Ambos dicen que sí. «Si queda en el protocolo escrito, es más fácil para todos.» Cierran con un acuerdo compartido.',feedback:'Convertir el señalamiento en un principio colectivo evita personalizar el conflicto. El protocolo que surge del diálogo tiene más adhesión que una norma impuesta.',score:{E:2,CA:2,ER:2}}
+        ]
+      }
+    ],
+    reflexiones:[
+      '¿Cuándo conviene que el directivo decida y cuándo es mejor facilitar que el equipo encuentre la solución?',
+      '¿Qué condiciones de base (recursos, comunicación, normas claras) hubieran podido prevenir este conflicto?'
+    ]
+  },
+  {
+    id:'d',
+    titulo:'La innovación que no salió',
+    subtitulo:'Docente que intentó una innovación pedagógica con resultados negativos.',
+    personaje:'Luis Herrera',
+    contexto:'El docente Luis Herrera aplicó una metodología nueva en su clase de matemáticas de 8.° año: aprendizaje por proyectos. Los resultados del parcial fueron los más bajos del año. Algunos padres se quejaron. Luis llega a tu oficina con evidente agotamiento y vergüenza.',
+    momentos:[
+      {
+        situacion:'Luis entra cabizbajo. Empieza diciendo: «Sé que fue un error. No vuelve a pasar.» ¿Cómo respondes?',
+        opciones:[
+          {texto:'«Luis, tienes razón en preocuparte. Hubo quejas y tenemos que hablar del impacto en los estudiantes.»',tipo:'sancionadora',reaccion:'Luis se hunde en la silla. «Lo sé.» No puede avanzar desde el miedo al juicio.',feedback:'Iniciar desde el impacto negativo cuando hay arrepentimiento genuino no genera aprendizaje, sino parálisis. Luis ya lo sabe; lo que necesita es un espacio para pensar.',score:{E:0,CA:0,ER:0}},
+          {texto:'«Cuéntame qué pasó, Luis. ¿Cómo fue el proceso?»',tipo:'neutra',reaccion:'Luis comparte algunos detalles. Se siente un poco más cómodo, aunque aún en modo defensivo.',feedback:'Preguntar es buena práctica. Añadir validación del esfuerzo de innovar antes de la pregunta técnica abriría más el diálogo.',score:{E:1,CA:1,ER:1}},
+          {texto:'«Luis, antes de que digas nada más: intentar algo nuevo toma coraje. Cuéntame desde el comienzo, sin filtros. Estoy aquí para entender, no para juzgar.»',tipo:'restaurativa',reaccion:'Luis levanta la vista. «¿En serio?» Respira. «Bueno... fue así.» Y empieza a abrirse con detalle.',feedback:'Validar el acto de innovar antes de analizar el resultado es un gesto restaurativo poderoso. Luis pasa de autocastigarse a reflexionar productivamente.',score:{E:2,CA:2,ER:2}}
+        ]
+      },
+      {
+        situacion:'Luis explica que investigó la metodología, la planificó, pero subestimó el contexto del grupo. Quiere abandonar la idea. ¿Qué le propones?',
+        opciones:[
+          {texto:'«Por ahora regresa a los métodos tradicionales. Los resultados no dan margen para más experimentos este año.»',tipo:'sancionadora',reaccion:'Luis asiente pero parece apagado. «Entendido.» Cumplirá, pero su motivación de innovar quedará suprimida.',feedback:'Restringir la innovación desde el primer tropiezo refuerza la cultura del miedo al error. Los docentes que prueban cosas nuevas son activo valioso, no un riesgo.',score:{E:0,CA:0,ER:0}},
+          {texto:'«Entiendo. Tal vez en un grupo diferente o el próximo año puedas retomarlo.»',tipo:'neutra',reaccion:'Luis: «Puede ser.» Una respuesta que no cierra ni abre del todo.',feedback:'Posponer no es una solución ni una conversación productiva. Luis necesita reflexionar sobre lo sucedido y tener un plan concreto, no solo una postergación.',score:{E:1,CA:1,ER:0}},
+          {texto:'«No abandones la idea todavía. ¿Podemos analizar juntos qué funcionó, qué faltó y cómo ajustar? La experiencia tiene valor aunque los resultados hayan sido difíciles.»',tipo:'restaurativa',reaccion:'Luis cambia su postura: «Nunca lo había pensado así. Hay cosas que sí funcionaron.» Empieza a ver el error como información.',feedback:'Separar el resultado del proceso permite que el docente extraiga aprendizaje real. Esta postura fomenta la cultura de innovación responsable, no el ensayo sin reflexión.',score:{E:2,CA:2,ER:2}}
+        ]
+      },
+      {
+        situacion:'Luis pregunta cómo responder a los padres que se quejaron. ¿Qué le orientas?',
+        opciones:[
+          {texto:'«Yo me encargo de las quejas. Tú concéntrate en recuperar los resultados.»',tipo:'sancionadora',reaccion:'Luis se siente aliviado pero también infantilizado. No desarrolla habilidades para comunicarse con las familias.',feedback:'Asumir el problema por el docente no construye autonomía. Los directivos deben acompañar y co-construir la respuesta, no reemplazar al docente ante las familias.',score:{E:0,CA:1,ER:0}},
+          {texto:'«Comunica lo que pasó con transparencia. Las familias valoran la honestidad.»',tipo:'neutra',reaccion:'Luis: «¿Y si me preguntan cosas difíciles?» Necesita más apoyo concreto.',feedback:'El consejo genérico es válido pero insuficiente. Preparar juntos los puntos clave del mensaje daría a Luis herramientas reales para la conversación.',score:{E:1,CA:1,ER:1}},
+          {texto:'«Preparemos juntos los puntos clave del mensaje a familias: qué salió, qué aprendimos y qué viene ahora. Que sea honesto y orientado a soluciones.»',tipo:'restaurativa',reaccion:'«Eso me ayuda mucho. Si sé qué decir, me siento más seguro.» Luis sale con un plan concreto y dignidad recuperada.',feedback:'Co-construir la comunicación con el docente lo empodera y modela cómo convertir el error en una narrativa de aprendizaje. Las familias también ven un equipo que trabaja en conjunto.',score:{E:2,CA:2,ER:2}}
+        ]
+      }
+    ],
+    reflexiones:[
+      '¿Cómo puede la institución crear condiciones para que los docentes innoven con seguridad y apoyo?',
+      '¿De qué manera el error tratado con respeto puede convertirse en aprendizaje institucional?'
+    ]
+  }
+];
+
+let simActual=null, momentoActual=0, scoresActual={E:0,CA:0,ER:0};
+let simResultados=lsGet('sim_resultados',{});
+
+function renderCaseCards(){
+  const wrap=document.getElementById('case-cards');
+  wrap.innerHTML='';
+  CASOS.forEach(c=>{
+    const done=simResultados[c.id];
+    const div=document.createElement('div');
+    div.className='case-card'+(done?' done':'');
+    div.innerHTML=`
+      <h4>${c.titulo}</h4>
+      <p>${c.subtitulo}</p>
+      <div class="status" style="color:${done?'var(--success)':'var(--text-light)'}">${done?'✅ Completado':'⬜ Pendiente'}</div>
+    `;
+    div.onclick=()=>iniciarCaso(c);
+    wrap.appendChild(div);
+  });
+}
+
+function iniciarCaso(caso){
+  simActual=caso;
+  momentoActual=0;
+  scoresActual={E:0,CA:0,ER:0};
+  document.getElementById('sim-selector').style.display='none';
+  document.getElementById('sim-result').style.display='none';
+  document.getElementById('sim-play').style.display='block';
+  document.getElementById('sim-case-header').innerHTML=`
+    <h3 style="margin-bottom:4px;">${caso.titulo}</h3>
+    <p style="font-size:.88rem;color:var(--text-light);">${caso.subtitulo}</p>
+  `;
+  renderMomento();
+}
+
+function renderMomento(){
+  const caso=simActual;
+  const m=caso.momentos[momentoActual];
+  const area=document.getElementById('sim-moment-area');
+  area.innerHTML=`
+    <div class="sim-context">
+      ${momentoActual===0?`<div class="quien">📌 Contexto</div><p>${caso.contexto}</p><br>`:'' }
+      <div class="quien">👤 ${caso.personaje}</div>
+      <p>${m.situacion}</p>
+    </div>
+    <span class="moment-label">Momento ${momentoActual+1} de ${caso.momentos.length}</span>
+    <div id="opciones-wrap"></div>
+  `;
+  const wrap=document.getElementById('opciones-wrap');
+  m.opciones.forEach((op,i)=>{
+    const btn=document.createElement('button');
+    btn.className='choice-btn';
+    btn.textContent=(i===0?'A) ':i===1?'B) ':'C) ')+op.texto;
+    btn.onclick=()=>elegirOpcion(op,btn);
+    wrap.appendChild(btn);
+  });
+}
+
+function elegirOpcion(op,btn){
+  // Bloquear demás botones
+  document.querySelectorAll('.choice-btn').forEach(b=>{
+    b.disabled=true;
+    b.style.opacity='0.5';
+  });
+  btn.style.opacity='1';
+  btn.style.borderColor='var(--gold)';
+  btn.style.background='var(--pastel-gold)';
+
+  scoresActual.E+=op.score.E;
+  scoresActual.CA+=op.score.CA;
+  scoresActual.ER+=op.score.ER;
+
+  const wrap=document.getElementById('opciones-wrap');
+
+  const reaccion=document.createElement('div');
+  reaccion.className='reaction-box';
+  reaccion.innerHTML=`<div class="name">💬 ${simActual.personaje}:</div><p style="font-size:.93rem;margin-top:4px;">${op.reaccion}</p>`;
+
+  const feedback=document.createElement('div');
+  feedback.className='feedback-box';
+  feedback.innerHTML=`
+    <span class="tipo tipo-${op.tipo}">${op.tipo.charAt(0).toUpperCase()+op.tipo.slice(1)}</span>
+    <p style="font-size:.9rem;">${op.feedback}</p>
+  `;
+
+  const btnNext=document.createElement('button');
+  const esUltimo=momentoActual===simActual.momentos.length-1;
+  btnNext.className='btn btn-primary';
+  btnNext.textContent=esUltimo?'Ver resultados ✅':'Siguiente momento →';
+  btnNext.style.marginTop='10px';
+  btnNext.onclick=()=>{
+    if(esUltimo) mostrarResultado();
+    else{momentoActual++;renderMomento();}
+  };
+
+  wrap.appendChild(reaccion);
+  wrap.appendChild(feedback);
+  wrap.appendChild(btnNext);
+}
+
+function mostrarResultado(){
+  document.getElementById('sim-play').style.display='none';
+  const res=document.getElementById('sim-result');
+  res.style.display='block';
+  document.getElementById('res-case-title').textContent=simActual.titulo;
+
+  const max=simActual.momentos.length*2;
+  const dims=[
+    {k:'E',label:'Empatía',color:'#27AE60'},
+    {k:'CA',label:'Comunicación asertiva',color:'var(--navy)'},
+    {k:'ER',label:'Enfoque restaurativo',color:'var(--gold)'}
+  ];
+
+  const bars=document.getElementById('score-bars');
+  bars.innerHTML='';
+  dims.forEach(d=>{
+    const val=scoresActual[d.k];
+    const pct=Math.round(val/max*100);
+    bars.innerHTML+=`
+      <div class="score-row">
+        <div class="s-label"><span>${d.label}</span><span>${val}/${max}</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${d.color};"></div></div>
+      </div>`;
+  });
+
+  const rqs=document.getElementById('reflex-qs');
+  rqs.innerHTML='';
+  simActual.reflexiones.forEach(q=>{
+    rqs.innerHTML+=`<div class="reflex-q">🔸 ${q}</div>`;
+  });
+
+  // Guardar resultado
+  simResultados[simActual.id]=scoresActual;
+  lsSet('sim_resultados',simResultados);
+  renderCaseCards();
+  window.scrollTo(0,0);
+}
+
+function volverSimSelector(){
+  document.getElementById('sim-play').style.display='none';
+  document.getElementById('sim-result').style.display='none';
+  document.getElementById('sim-selector').style.display='block';
+}
+
+renderCaseCards();
+
+// ────────────────────────────────────────────
+// ── CÍRCULOS ──
+// ────────────────────────────────────────────
+const PREGUNTAS_CIRCULO=[
+  '¿Qué está yendo bien en nuestra institución y quiero que sigamos cultivando?',
+  '¿Qué situación reciente me afectó y quisiera que el equipo conozca?',
+  '¿Qué necesito del equipo directivo para hacer mejor mi trabajo?',
+  '¿Qué fortaleza de un compañero o compañera quisiera reconocer hoy?',
+  '¿Qué cambiaría en nuestra comunicación interna si pudiera hacerlo?',
+  '¿Cómo me he sentido en las últimas semanas en mi trabajo?',
+  '¿Qué propuesta tengo para mejorar el clima institucional?'
+];
+
+function renderPreguntas(){
+  const lista=document.getElementById('preguntas-lista');
+  lista.innerHTML='';
+  PREGUNTAS_CIRCULO.forEach(p=>{
+    const btn=document.createElement('button');
+    btn.textContent='💬 '+p;
+    btn.onclick=()=>{
+      btn.style.background='var(--pastel-blue)';
+      btn.style.borderColor='var(--navy)';
+    };
+    lista.appendChild(btn);
+  });
+}
+renderPreguntas();
+
+function enviarSugerencia(){
+  const txt=document.getElementById('sugerencia-txt').value.trim();
+  const alDiv=document.getElementById('sug-alert');
+  if(!txt){alDiv.innerHTML='<div class="alert alert-err">Por favor escribe tu sugerencia antes de enviar.</div>';return;}
+  const sugs=lsGet('sugerencias',[]);
+  sugs.unshift({
+    texto:txt,
+    fecha:new Date().toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'}),
+    estado:'recibida',
+    id:Date.now()
+  });
+  lsSet('sugerencias',sugs);
+  document.getElementById('sugerencia-txt').value='';
+  alDiv.innerHTML='<div class="alert alert-ok">✅ Sugerencia enviada. Aparecerá en el listado.</div>';
+  setTimeout(()=>alDiv.innerHTML='',3000);
+  renderSugerencias();
+}
+
+function cambiarEstado(id,est){
+  const sugs=lsGet('sugerencias',[]);
+  const s=sugs.find(x=>x.id===id);
+  if(s) s.estado=est;
+  lsSet('sugerencias',sugs);
+  renderSugerencias();
+}
+
+function renderSugerencias(){
+  const lista=document.getElementById('sugerencias-lista');
+  const sugs=lsGet('sugerencias',[]);
+  if(!sugs.length){lista.innerHTML='<p style="color:var(--text-light);font-size:.9rem;">No hay sugerencias aún.</p>';return;}
+  lista.innerHTML='';
+  sugs.forEach(s=>{
+    const tagClass={'recibida':'tag-recibida','en revisión':'tag-revision','respondida en junta académica':'tag-respondida'}[s.estado]||'tag-recibida';
+    const div=document.createElement('div');
+    div.className='sug-item';
+    div.innerHTML=`
+      <div class="fecha">${s.fecha}</div>
+      <p>${s.texto}</p>
+      <div class="sug-footer">
+        <span class="tag ${tagClass}">${s.estado.charAt(0).toUpperCase()+s.estado.slice(1)}</span>
+        <select onchange="cambiarEstado(${s.id},this.value)" style="font-size:.78rem;padding:4px 8px;width:auto;">
+          <option value="recibida" ${s.estado==='recibida'?'selected':''}>Recibida</option>
+          <option value="en revisión" ${s.estado==='en revisión'?'selected':''}>En revisión</option>
+          <option value="respondida en junta académica" ${s.estado==='respondida en junta académica'?'selected':''}>Respondida en junta</option>
+        </select>
+      </div>`;
+    lista.appendChild(div);
+  });
+}
+renderSugerencias();
+
+// ────────────────────────────────────────────
+// ── HUELLAS ──
+// ────────────────────────────────────────────
+const COMISIONES={
+  'innovación':'Comisión de Innovación Pedagógica',
+  'empatía':'Comisión de Bienestar y Convivencia',
+  'colaboración':'Comisión de Gestión Colaborativa',
+  'comunicación':'Comisión de Comunicación Institucional',
+  'liderazgo':'Comisión de Liderazgo y Formación',
+  'resiliencia':'Comisión de Apoyo Socioemocional'
+};
+
+function publicarHuella(){
+  const nombre=document.getElementById('h-nombre').value.trim();
+  const msg=document.getElementById('h-mensaje').value.trim();
+  const fortaleza=document.getElementById('h-fortaleza').value;
+  const al=document.getElementById('h-alert');
+  if(!nombre||!msg||!fortaleza){
+    al.innerHTML='<div class="alert alert-err">Completa todos los campos para publicar.</div>';return;
+  }
+  const huellas=lsGet('huellas',[]);
+  huellas.unshift({nombre,msg,fortaleza,fecha:new Date().toLocaleDateString('es-EC',{day:'2-digit',month:'short',year:'numeric'}),id:Date.now()});
+  lsSet('huellas',huellas);
+  document.getElementById('h-nombre').value='';
+  document.getElementById('h-mensaje').value='';
+  document.getElementById('h-fortaleza').value='';
+  al.innerHTML='<div class="alert alert-ok">⭐ Publicado en el muro.</div>';
+  setTimeout(()=>al.innerHTML='',3000);
+  renderHuellas();
+}
+
+function renderHuellas(){
+  const muro=document.getElementById('huellas-muro');
+  const huellas=lsGet('huellas',[]);
+  if(!huellas.length){muro.innerHTML='<p style="color:var(--text-light);font-size:.9rem;padding:8px 0;">El muro de reconocimiento está vacío. ¡Sé el primero en publicar!</p>';return;}
+  muro.innerHTML='';
+  huellas.forEach(h=>{
+    const comision=COMISIONES[h.fortaleza]||'Comisión General';
+    const div=document.createElement('div');
+    div.className='huella-card';
+    div.innerHTML=`
+      <div class="huella-nombre">⭐ ${h.nombre}</div>
+      <div class="huella-msg">${h.msg}</div>
+      <span class="huella-comision">💡 ${comision}</span>
+      <div class="huella-fecha">${h.fecha}</div>`;
+    muro.appendChild(div);
+  });
+}
+renderHuellas();
+
+// Ejemplo precargado si muro vacío
+if(!lsGet('huellas',[]).length){
+  lsSet('huellas',[
+    {nombre:'Maestra Valeria Moncada',msg:'Creó un rincón de lectura con materiales reciclados que motivó a 28 estudiantes a leer en tiempo libre. Un gesto pequeño con un impacto enorme.',fortaleza:'innovación',fecha:'28 oct 2026',id:1},
+    {nombre:'El equipo de 5.° año',msg:'Organizaron una jornada de nivelación los sábados de forma voluntaria. Su compromiso con los estudiantes que iban rezagados fue ejemplar.',fortaleza:'colaboración',fecha:'25 oct 2026',id:2}
+  ]);
+  renderHuellas();
+}
+
+// ────────────────────────────────────────────
+// ── BIENESTAR ──
+// ────────────────────────────────────────────
+let pausaInterval=null, pausaRunning=false;
+const FASES=[
+  {label:'Inhala',dur:4,clase:'inhala'},
+  {label:'Retén',dur:4,clase:'retiene'},
+  {label:'Exhala',dur:6,clase:'exhala'}
+];
+
+function iniciarPausa(){
+  if(pausaRunning) return;
+  pausaRunning=true;
+  document.getElementById('btn-pausa').disabled=true;
+  let totalSec=60, faseIdx=0, faseTimer=0;
+  const circle=document.getElementById('breath-circle');
+  const timer=document.getElementById('breath-timer');
+  const phase=document.getElementById('breath-phase');
+  const texto=document.getElementById('breath-texto');
+
+  function aplicarFase(idx){
+    const f=FASES[idx%3];
+    circle.className='breath-circle '+f.clase;
+    phase.textContent=f.label;
+    texto.textContent=f.label;
+    faseTimer=f.dur;
+    // Re-trigger animation
+    void circle.offsetWidth;
+  }
+  aplicarFase(faseIdx);
+
+  pausaInterval=setInterval(()=>{
+    totalSec--;
+    faseTimer--;
+    timer.textContent=totalSec;
+    if(faseTimer<=0){
+      faseIdx++;
+      aplicarFase(faseIdx);
+    }
+    if(totalSec<=0){
+      clearInterval(pausaInterval);
+      pausaRunning=false;
+      circle.className='breath-circle';
+      phase.textContent='¡Muy bien!';
+      texto.textContent='✓';
+      timer.textContent='0';
+      document.getElementById('btn-pausa').disabled=false;
+      document.getElementById('btn-pausa').textContent='▶ Iniciar de nuevo';
+    }
+  },1000);
+}
+
+const EMOCIONES=[
+  {ic:'😌',label:'Tranquilidad',msg:'Llegas en un buen momento. Tu ecuanimidad es un recurso valioso.'},
+  {ic:'😃',label:'Entusiasmo',msg:'Tu energía puede contagiar al equipo. Aprovéchala.'},
+  {ic:'😟',label:'Preocupación',msg:'Es válido llegar con inquietudes. Menciona si algo necesita espacio.'},
+  {ic:'😤',label:'Tensión',msg:'Nota la tensión sin reprimirla. Una pausa breve puede ayudar.'},
+  {ic:'😴',label:'Cansancio',msg:'Estás presente a pesar del cansancio. Eso también toma esfuerzo.'},
+  {ic:'😐',label:'Neutralidad',msg:'Llegar en neutro es completamente válido. Observa cómo evoluciona.'}
+];
+
+function renderEmociones(){
+  const grid=document.getElementById('emociones-grid');
+  grid.innerHTML='';
+  EMOCIONES.forEach((e,i)=>{
+    const btn=document.createElement('button');
+    btn.className='emo-btn';
+    btn.innerHTML=`<span class="emo-ic">${e.ic}</span><span class="emo-label">${e.label}</span>`;
+    btn.onclick=()=>{
+      document.querySelectorAll('.emo-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('emo-msg').textContent=e.msg;
+    };
+    grid.appendChild(btn);
+  });
+}
+renderEmociones();
+
+// Horario
+const DIAS=['Lunes','Martes','Miércoles','Jueves','Viernes'];
+const horarioDefault=[
+  {dia:'Lunes',desde:'07:30',hasta:'17:00'},
+  {dia:'Martes',desde:'07:30',hasta:'17:00'},
+  {dia:'Miércoles',desde:'07:30',hasta:'17:00'},
+  {dia:'Jueves',desde:'07:30',hasta:'17:00'},
+  {dia:'Viernes',desde:'07:30',hasta:'15:00'}
+];
+
+function renderHorario(){
+  const datos=lsGet('horario',horarioDefault);
+  const tbody=document.getElementById('horario-body');
+  tbody.innerHTML='';
+  datos.forEach((row,i)=>{
+    tbody.innerHTML+=`<tr>
+      <td>${row.dia}</td>
+      <td><input type="time" value="${row.desde}" id="h-d-${i}" oninput=""></td>
+      <td><input type="time" value="${row.hasta}" id="h-h-${i}" oninput=""></td>
+    </tr>`;
+  });
+}
+
+function guardarHorario(){
+  const datos=lsGet('horario',horarioDefault).map((row,i)=>({
+    dia:row.dia,
+    desde:document.getElementById('h-d-'+i)?.value||row.desde,
+    hasta:document.getElementById('h-h-'+i)?.value||row.hasta
+  }));
+  lsSet('horario',datos);
+  document.getElementById('horario-alert').innerHTML='<div class="alert alert-ok" style="margin-top:8px;">💾 Horario guardado.</div>';
+  setTimeout(()=>document.getElementById('horario-alert').innerHTML='',2500);
+}
+renderHorario();
+
+// Plantilla
+const PLANTILLA_DEFAULT=`Estimado equipo docente:
+
+Les comunicamos con anticipación que el [día, fecha] a las [hora] se realizará [actividad/reunión].
+
+Por favor confirmen su asistencia hasta el [día anterior] por este mismo canal.
+
+Gracias por su puntualidad y compromiso.
+
+Directivo(a)
+Unidad Educativa "25 de Junio"`;
+
+function initPlantilla(){
+  const guardada=lsGet('plantilla',PLANTILLA_DEFAULT);
+  document.getElementById('plantilla-msg').value=guardada;
+  document.getElementById('plantilla-msg').addEventListener('input',e=>lsSet('plantilla',e.target.value));
+}
+initPlantilla();
+
+function copiarPlantilla(){
+  const txt=document.getElementById('plantilla-msg').value;
+  const el=document.getElementById('plantilla-alert');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt).then(()=>{
+      el.innerHTML='<div class="alert alert-ok" style="margin-top:8px;">📋 Copiado al portapapeles.</div>';
+      setTimeout(()=>el.innerHTML='',2500);
+    });
+  } else {
+    el.innerHTML='<div class="alert alert-err" style="margin-top:8px;">Selecciona el texto manualmente para copiarlo.</div>';
+  }
+}
+
+// ────────────────────────────────────────────
+// ── PRUEBA TEMPRANA ──
+// ────────────────────────────────────────────
+const PREGUNTAS_PRUEBA=[
+  {id:'p1',texto:'¿Qué tan claro te resultó el propósito de esta herramienta?',dimension:'Claridad'},
+  {id:'p2',texto:'¿Qué tan útil consideras el Simulador de Mediación para tu trabajo?',dimension:'Utilidad — Simulador'},
+  {id:'p3',texto:'¿Qué tan fácil fue navegar entre las secciones?',dimension:'Facilidad de uso'},
+  {id:'p4',texto:'¿Qué tan relevante es el contenido sobre Bienestar y Desconexión para tu realidad?',dimension:'Relevancia — Bienestar'},
+  {id:'p5',texto:'¿Qué tan probable es que uses esta herramienta con tu equipo?',dimension:'Intención de uso'}
+];
+
+let respuestasPrueba={};
+
+function renderPreguntasPrueba(){
+  const wrap=document.getElementById('preguntas-prueba');
+  wrap.innerHTML='';
+  PREGUNTAS_PRUEBA.forEach(p=>{
+    const div=document.createElement('div');
+    div.className='pregunta-block';
+    let escalaBtns='';
+    for(let i=1;i<=5;i++){
+      escalaBtns+=`<button class="escala-btn" data-p="${p.id}" data-v="${i}" onclick="selEscala('${p.id}',${i},this)">${i}</button>`;
+    }
+    div.innerHTML=`
+      <div class="q-text">${p.texto}</div>
+      <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-light);margin-bottom:5px;">
+        <span>Poco / No claro</span><span>Mucho / Muy claro</span>
+      </div>
+      <div class="escala">${escalaBtns}</div>
+    `;
+    wrap.appendChild(div);
+    wrap.appendChild(document.createElement('br'));
+  });
+}
+
+function selEscala(pId,val,btn){
+  respuestasPrueba[pId]=val;
+  document.querySelectorAll(`[data-p="${pId}"]`).forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function enviarPrueba(){
+  const al=document.getElementById('prueba-alert');
+  const faltantes=PREGUNTAS_PRUEBA.filter(p=>!respuestasPrueba[p.id]);
+  if(faltantes.length){
+    al.innerHTML='<div class="alert alert-err">Responde todas las preguntas antes de enviar.</div>';return;
+  }
+  const comentario=document.getElementById('prueba-comentario').value.trim();
+  const registro=lsGet('prueba_registros',[]);
+  registro.push({
+    fecha:new Date().toLocaleDateString('es-EC'),
+    respuestas:{...respuestasPrueba},
+    comentario
+  });
+  lsSet('prueba_registros',registro);
+  al.innerHTML='<div class="alert alert-ok">✅ Evaluación enviada. ¡Gracias!</div>';
+  respuestasPrueba={};
+  renderPreguntasPrueba();
+  document.getElementById('prueba-comentario').value='';
+  renderResultadosPrueba();
+}
+
+function renderResultadosPrueba(){
+  const registros=lsGet('prueba_registros',[]);
+  const resDiv=document.getElementById('prueba-resultados');
+  const content=document.getElementById('resultado-content');
+  if(!registros.length){resDiv.style.display='none';return;}
+  resDiv.style.display='block';
+
+  // Promedios por pregunta
+  let html=`<p style="font-size:.88rem;color:var(--text-light);margin-bottom:12px;"><strong>${registros.length}</strong> evaluación(es) registrada(s)</p>`;
+  PREGUNTAS_PRUEBA.forEach(p=>{
+    const vals=registros.map(r=>r.respuestas[p.id]||0);
+    const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+    const pct=(avg/5)*100;
+    html+=`
+      <div class="score-row" style="margin-bottom:12px;">
+        <div class="s-label" style="font-size:.82rem;"><span>${p.dimension}</span><span>${avg.toFixed(1)}/5</span></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;"></div></div>
+      </div>`;
+  });
+
+  const comentarios=registros.filter(r=>r.comentario).map(r=>`<li style="margin-bottom:6px;font-size:.88rem;">"${r.comentario}"</li>`);
+  if(comentarios.length){
+    html+=`<div class="divider"></div><h4 style="font-size:.92rem;color:var(--navy);margin-bottom:8px;">💬 Comentarios</h4><ul style="padding-left:18px;">${comentarios.join('')}</ul>`;
+  }
+  content.innerHTML=html;
+}
+
+function exportarJSON(){
+  const datos=lsGet('prueba_registros',[]);
+  if(!datos.length){document.getElementById('export-alert').innerHTML='<div class="alert alert-err">No hay datos para exportar.</div>';return;}
+  const json=JSON.stringify({
+    herramienta:'LideraConecta',
+    exportado:new Date().toISOString(),
+    registros:datos
+  },null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='lideraconecta_prueba.json';a.click();
+  URL.revokeObjectURL(url);
+  document.getElementById('export-alert').innerHTML='<div class="alert alert-ok" style="margin-top:8px;">⬇️ Descarga iniciada.</div>';
+  setTimeout(()=>document.getElementById('export-alert').innerHTML='',3000);
+}
+
+renderPreguntasPrueba();
+renderResultadosPrueba();
+</script>
+</body>
+</html>
